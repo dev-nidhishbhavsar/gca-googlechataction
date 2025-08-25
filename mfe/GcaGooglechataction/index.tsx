@@ -5,14 +5,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import singleSpaReact from "single-spa-react";
-import {{component_id}} from "./{{component_id}}";
+import GcaGooglechataction from "./GcaGooglechataction";
 
-function {{component_id}}Root(props) {
+function GcaGooglechatactionRoot(props) {
   return (
     <AppProviders>
       <BrowserRouter basename={getBasePath()}>
         <Subscribe>
-          <{{component_id}} {...props} />
+          <GcaGooglechataction {...props} />
         </Subscribe>
       </BrowserRouter>
     </AppProviders>
@@ -22,7 +22,7 @@ function {{component_id}}Root(props) {
 const lifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: {{component_id}}Root,
+  rootComponent: GcaGooglechatactionRoot,
   errorBoundary(err, info, props) {
     // Customize the root error boundary for your microfrontend here.
     return null;
