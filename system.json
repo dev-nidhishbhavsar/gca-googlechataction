@@ -1,9 +1,9 @@
 {
     "auth": true,
-    "description": "",
+    "description": "Develop Template",
     "messaging_url": "community.clearblade.com:1883",
-    "name": "ia-components",
+    "name": "ia-nidhish-test",
     "platform_url": "https://community.clearblade.com",
-    "system_key": "88a2fef10cda9cf4d4afb4acc7ef01",
-    "system_secret": "88A2FEF10CA8F7DEB980E29DF93C"
+    "system_key": "a0a5b98a0dba869da8dcaec4f440",
+    "system_secret": "unused"
 }

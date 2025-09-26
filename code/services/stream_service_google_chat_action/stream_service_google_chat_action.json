@@ -1,0 +1,35 @@
+{
+    "AutoBalanceEuid": "f899bbe40ce0ac9c91f794ae899401",
+    "System": "a0a5b98a0dba869da8dcaec4f440",
+    "auto_balance": true,
+    "auto_balance_euid": "f899bbe40ce0ac9c91f794ae899401",
+    "auto_scale": false,
+    "code_hash": "7fffa6a4ed1b0903daa6e11a152a2669",
+    "concurrency": 1,
+    "current_version": 49,
+    "dependencies": "log,mqtt,clearblade_async,crypto,actionUtils",
+    "engine_type": 1,
+    "euid": "",
+    "execution_timeout": -1,
+    "log_level": "debug",
+    "log_ttl_minutes": 10080,
+    "logging_enabled": true,
+    "max_scale_concurrency": 0,
+    "min_scale_concurrency": 0,
+    "name": "stream_service_google_chat_action",
+    "params": [
+        ""
+    ],
+    "permissions": {
+        "Administrator": 1,
+        "Authenticated": 1
+    },
+    "run_on_edge": true,
+    "run_on_platform": true,
+    "run_user": "",
+    "sensitive_params": false,
+    "source": "stream_service_google_chat_action.js",
+    "system_key": "a0a5b98a0dba869da8dcaec4f440",
+    "uuid": "d67bc470-f35a-4906-bb2e-37bede133bbe",
+    "version": 49
+}
