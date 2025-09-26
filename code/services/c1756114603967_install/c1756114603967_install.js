@@ -23,7 +23,7 @@ function c1756114603967_install(req, resp) {
     "name": "actionTypes.create",
     "body": {
       "item": {
-        "id": "send_google_chat5",
+        "id": "send_google_chat",
         "label": "Send Google Chat Message",
         "schema": JSON.stringify([
           {
@@ -32,7 +32,7 @@ function c1756114603967_install(req, resp) {
             "input": "text",
             "allow_multiple": false,
             "required": false,
-            "uuid": "4df472ec-faad-4236-9d13-2a9abbe0a4bb"
+            "uuid": newUUID()
           },
           {
             "displayName": "Message",
@@ -40,7 +40,7 @@ function c1756114603967_install(req, resp) {
             "input": "textarea",
             "allow_multiple": false,
             "required": false,
-            "uuid": "25bb09f9-48f0-4537-9541-3a8023095344"
+            "uuid": newUUID()
           }
         ])
       },
@@ -49,7 +49,7 @@ function c1756114603967_install(req, resp) {
   };
   
   // Make API call to create action type
-  const apiUrl = `https://community.clearblade.com/api/v/1/code/${systemKey}/createTableItems?id=actionTypes.create`;
+  const apiUrl = 'https://' + cbmeta.platform_url + '/api/v/1/code/' + systemKey + '/createTableItems?id=actionTypes.create';
 
   log('API URL', apiUrl);
   
@@ -66,16 +66,16 @@ function c1756114603967_install(req, resp) {
     .then(function(response) {
       log('Response ', JSON.stringify(response));
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+        throw new Error('API request failed with status'+ response.status +' '+ response.statusText);
       }
       return response.json();
     })
     .then(function(data) {
       log('Action type created successfully:', JSON.stringify(data));
-      resp.success('Setup completed successfully - Action type created');
+      resp.success('Install completed successfully - Action type created');
     })
     .catch(function(error) {
       log('Error creating action type:', error);
-      resp.error('Setup failed: ' + error.message);
+      resp.error('Install failed: ' + error.message);
     });
 }
