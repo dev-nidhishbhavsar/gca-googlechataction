@@ -79,82 +79,6 @@ function getAccessToken(secrets) {
 }
 
 /**
- * List all available spaces and check app membership status
- * @param {string} accessToken 
- * @returns {Promise}
- */
-function listAvailableSpaces(accessToken) {
-  log('[SPACELIST] Starting to list all available spaces...');
-
-  // First, get all spaces the app has access to
-  const spacesUrl = 'https://chat.googleapis.com/v1/spaces';
-
-  return fetch(spacesUrl, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + accessToken,
-      'Content-Type': 'application/json'
-    }
-  }).then(function (response) {
-    log('[SPACELIST] Spaces list response status:', response.status);
-
-    if (!response.ok) {
-      log('[ERROR] Failed to list spaces:', response.statusText);
-      throw new Error(`Failed to list spaces: ${response.status} ${response.statusText}`);
-    }
-
-    return response.json();
-  }).then(function (spacesData) {
-    const spaces = spacesData.spaces || [];
-    log('[SPACELIST] Total spaces found:', spaces.length);
-
-    if (spaces.length === 0) {
-      log('[WARNING] No spaces found that the app has access to');
-      return [];
-    }
-
-    // Log basic space information
-    spaces.forEach(function (space, index) {
-      log(`[SPACE${index + 1}] Name: ${space.name}, Display Name: ${space.displayName || 'N/A'}, Type: ${space.type || 'N/A'}`);
-    });
-
-    return spaces;
-  }).catch(function (error) {
-    log('[ERROR] Error listing spaces:', error.message);
-    return [];
-  });
-}
-
-/**
- * Replace placeholders in message text with actual values
- * @param {string} messageTemplate - Message with placeholders like "Hello {name}"
- * @param {object} placeholders - Key-value pairs for replacement, e.g., {name: "John", platformName: "ClearBlade"}
- * @returns {string} - Message with placeholders replaced
- */
-function replacePlaceholders(messageTemplate, placeholders) {
-  if (!placeholders || typeof placeholders !== 'object') {
-    log('[WARNING] No placeholders provided, using message as-is');
-    return messageTemplate;
-  }
-
-  let processedMessage = messageTemplate;
-
-  // Replace each placeholder
-  Object.keys(placeholders).forEach(function (key) {
-    const placeholder = `{${key}}`;
-    const value = placeholders[key];
-
-    // Replace all occurrences of this placeholder
-    processedMessage = processedMessage.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
-
-    log(`[REPLACE] Replaced ${placeholder} with "${value}"`);
-  });
-
-  log('[FINALMESSAGE] Final message:', processedMessage);
-  return processedMessage;
-}
-
-/**
  * Send message to Google Chat using official Chat API with service account
  * As documented in Google's Chat API guide
  * @param {string} messageTemplate - The message template with placeholders like "Hello {platformName}"
@@ -171,16 +95,6 @@ function sendGoogleChatMessage(message, channelId, secrets) {
       .then(function (accessToken) {
         log('[ACCESSTOKEN] Got access token with domain-wide delegation');
         return accessToken;
-        // // List all available spaces 
-        // return listAvailableSpaces(accessToken)
-        //   .then(function (spaces) {
-        //     log('[SPACELIST] Space listing completed, proceeding with message sending');
-        //     return accessToken; // Pass token to next step
-        //   })
-        //   .catch(function (listError) {
-        //     log('[WARNING] Space listing failed, continuing with message sending:', listError.message);
-        //     return accessToken; // Continue even if space listing fails
-        //   });
       })
       .then(function (accessToken) {
         // Process placeholders in the message template
@@ -200,7 +114,7 @@ function sendGoogleChatMessage(message, channelId, secrets) {
           body: JSON.stringify(messageData)
         };
 
-        const url = `https://chat.googleapis.com/v1/spaces/${channelId}/messages`;
+        const url = "https://chat.googleapis.com/v1/spaces/" + channelId + "/messages";
         log('[SENDMESSAGE] Sending message to:', url);
 
         return fetch(url, options);
@@ -208,7 +122,7 @@ function sendGoogleChatMessage(message, channelId, secrets) {
       .then(function (response) {
         log('[RESPONSE] Message Response Status:', response.status)
         if (!response.ok) {
-          throw new Error(`Google Chat API request failed with status ${response.status}: ${response.statusText}`);
+          throw new Error("Google Chat API request failed with status " + response.status + ": " + response.statusText);
         }
         return response.json();
       })
