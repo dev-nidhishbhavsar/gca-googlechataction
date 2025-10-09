@@ -68,12 +68,11 @@ function getAccessToken(secrets) {
     secrets["google_chat_private_key"],
     "RS256",
     SCOPE,
-    3600, // 1 hour expiry
-    // impersonateUser // Impersonate domain admin
+    3600
   );
 
   return getToken(jwt).then(function (tokenResponse) {
-    log('token response ', tokenResponse)
+    log('Successfully obtained access token')
     return tokenResponse.access_token;
   });
 }
@@ -178,13 +177,13 @@ function stream_service_google_chat_action(req, resp) {
 
   function processMessage(msg, topic) {
     const payload = JSON.parse(msg.payload);
-    // TODO: Need to cheange secret name and also add this process in README.md
+    // TODO: Need to change secret name and also add this process in README.md
     ClearBladeAsync.Secret()
-      .read("secret")
+      .read("google_chat_secrets")
       .then(function (secrets) {
        
         if(!secrets || !secrets.google_chat_client_email || !secrets.google_chat_private_key) {
-          log("failed to parse secrets: " + JSON.stringify(secrets));
+          log("failed to parse secrets: missing required fields");
           const errorRes = {
             success: false,
             payload,
@@ -232,7 +231,7 @@ function stream_service_google_chat_action(req, resp) {
               error: error.message,
             };
             client
-              .publish("component/action/custom/send_google_chat/response", errorRes)
+              .publish("component/action/custom/send_google_chat/response", JSON.stringify(errorRes))
               .then(
                 function () {
                   log("Error successfully published message");
